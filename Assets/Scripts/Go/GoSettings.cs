@@ -8,6 +8,7 @@ namespace Go
         [Header("Pawns")]
         public GameObject prefabPawnA;
         public GameObject prefabPawnB;
+        public GameObject prefabPositionAB;
         public float pawnsSize;
 
         [Header("Board")] 

@@ -11,21 +11,14 @@ namespace Go
         public NodeType pawnType;
         public int index;
 
-        public Vector2 convertXY;
-        public Vector3 realXY;
-
         public GameObject pawn;
+        public GameObject pawnPosition;
 
-        public Node(Go go, NodeType pawnType, int index, Vector2 convertXY, Vector3 realXY)
+        public Node(Go go, int index, GameObject pawnPosition)
         {
             this.go = go;
-            this.pawnType = pawnType;
-            
             this.index = index;
-            this.convertXY = convertXY;
-            this.realXY = realXY;
-
-            this.go.Initialization(this);
+            this.pawnPosition = pawnPosition;
         }
     }
 

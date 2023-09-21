@@ -580,10 +580,12 @@ MonoBehaviour:
     type: 3}
   prefabPawnB: {fileID: 5483565497216186689, guid: 063119b9480eb034b85ff57b9a7d5436,
     type: 3}
+  prefabPositionAB: {fileID: 2052789968334861471, guid: edf1947401f898c45bc5f6a7e92baecc,
+    type: 3}
   pawnsSize: 1
   prefabBoard: {fileID: 1895212243}
-  boardSize: {x: 9, y: 9}
-  cellsSize: 9
+  boardSize: {x: 10, y: 10}
+  cellsSize: 10
 --- !u!4 &613553649
 Transform:
   m_ObjectHideFlags: 0

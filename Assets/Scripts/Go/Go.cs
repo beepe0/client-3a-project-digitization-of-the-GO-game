@@ -12,9 +12,7 @@ namespace Go
         [SerializeField] private Node[] _board;
         
         private Vector3 _offset;
-        private Vector3 _offsetHitPoint;
-        private Vector2 _convertHitPoint;
-        private int _convertMatrixToLine;
+        private Vector3 _pawnOffset;
         
         private void Awake()
         {
@@ -23,10 +21,7 @@ namespace Go
 
         private void Start()
         {
-            _goSettings.prefabBoard.transform.localScale = new Vector3(_goSettings.boardSize.x / _goSettings.cellsSize, 1, _goSettings.boardSize.y / _goSettings.cellsSize);
-        
-            _board = new Node[_goSettings.boardSize.x * _goSettings.boardSize.y];
-            _offset = new Vector3(gameObject.transform.localScale.x / 2, 0, -gameObject.transform.localScale.z / 2);
+            BoardInitialization();
         }
 
         private void Update()
@@ -45,20 +40,49 @@ namespace Go
             
             if (Physics.Raycast(r, out hit, 100))
             {
-                _offsetHitPoint = (hit.point + _offset) * _goSettings.cellsSize;
-                _convertHitPoint = new Vector2(Mathf.Floor(_offsetHitPoint.x), Mathf.Ceil(_offsetHitPoint.z));
-                _convertMatrixToLine =  (int)((_goSettings.boardSize.x * Mathf.Abs(_convertHitPoint.y)) + (_convertHitPoint.x));
+                
+                Vector3 _offsetHitPoint = (hit.point + _offset) * _goSettings.cellsSize;
+                Vector2 _convertHitPoint = new Vector2(Mathf.Floor(_offsetHitPoint.x), Mathf.Ceil(_offsetHitPoint.z));
+       
+                int _convertMatrixToLine =  (int)((_goSettings.boardSize.x * Mathf.Abs(_convertHitPoint.y)) + (_convertHitPoint.x));
 
-                _board[_convertMatrixToLine] = new Node(this, (NodeType)Random.Range(0,2), _convertMatrixToLine, _convertHitPoint, hit.point);
+                PawnInitialization(_board[_convertMatrixToLine]);
 
-                Debug.Log($"HIT: {hit.point}, OHIT: {_offsetHitPoint}, CHIT: {_convertHitPoint}, CMTL: {_convertMatrixToLine}");
+                Debug.Log($"HIT: {hit.point}, OHIT: {_offsetHitPoint}, CHIT: {_convertHitPoint}, CMTL: {_convertMatrixToLine}, T: {new Vector3(hit.point.x * _convertHitPoint.x, hit.point.y, hit.point.z * _convertHitPoint.y)}");
                 Debug.DrawLine(r.origin, hit.point, Color.red, 10);
             }
         }
-
-        public void Initialization(Node n)
+        
+        private void BoardInitialization()
         {
-            n.pawn = Instantiate(n.pawnType == NodeType.PawnA ? _goSettings.prefabPawnA : _goSettings.prefabPawnB, n.realXY, Quaternion.identity);
+            _goSettings.prefabBoard.transform.localScale = new Vector3(_goSettings.boardSize.x / _goSettings.cellsSize, 1, _goSettings.boardSize.y / _goSettings.cellsSize);
+            _offset = new Vector3(gameObject.transform.localScale.x / 2, 0, -gameObject.transform.localScale.z / 2);
+            _pawnOffset = new Vector3(_offset.x, -_offset.z);
+            _board = new Node[_goSettings.boardSize.x * _goSettings.boardSize.y];
+
+            for (int x = 0; x < _goSettings.boardSize.x; x++)
+            {
+                for (int y = 0; y > -_goSettings.boardSize.y; y--)
+                {
+                    int _convertMatrixToLine = (_goSettings.boardSize.x * Mathf.Abs(y)) + x;
+                    Vector3 newPos = new Vector3(x / _goSettings.cellsSize - (_pawnOffset.x - 0.05f), 0.5f, y / _goSettings.cellsSize + (_pawnOffset.y - 0.05f));
+                    GameObject t = Instantiate(_goSettings.prefabPositionAB, newPos, Quaternion.identity, gameObject.transform);
+                    //GameObject t = new GameObject();
+                    
+                    t.name = $"xyz: {newPos}";
+                    t.transform.position = newPos;
+                    t.transform.SetParent(gameObject.transform);
+
+                    _board[_convertMatrixToLine] = new Node(this, _convertMatrixToLine, t);
+                }
+            }
+        }
+        
+        public void PawnInitialization(Node n)
+        {
+            n.pawnType = (NodeType)Random.Range(0, 2);
+            n.pawn = Instantiate(n.pawnType == NodeType.PawnA ? _goSettings.prefabPawnA : _goSettings.prefabPawnB, n.pawnPosition.transform.position, Quaternion.identity, n.pawnPosition.transform);
+            n.pawn.transform.localScale = new Vector3(_goSettings.pawnsSize, 1, _goSettings.pawnsSize);
         }
     }
 }
