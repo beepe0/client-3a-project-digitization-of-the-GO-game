@@ -10,6 +10,7 @@ namespace Go
         
         public NodeType pawnType;
         public int index;
+        public bool isClosed;
 
         public GameObject pawn;
         public GameObject pawnPosition;
@@ -24,6 +25,7 @@ namespace Go
 
     public enum NodeType : byte
     {
+        None,
         PawnA,
         PawnB
     }

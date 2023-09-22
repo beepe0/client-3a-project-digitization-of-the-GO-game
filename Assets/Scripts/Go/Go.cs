@@ -56,8 +56,9 @@ namespace Go
         private void BoardInitialization()
         {
             _goSettings.prefabBoard.transform.localScale = new Vector3(_goSettings.boardSize.x / _goSettings.cellsSize, 1, _goSettings.boardSize.y / _goSettings.cellsSize);
-            _offset = new Vector3(gameObject.transform.localScale.x / 2, 0, -gameObject.transform.localScale.z / 2);
-            _pawnOffset = new Vector3(_offset.x, -_offset.z);
+            _offset = new Vector3(_goSettings.prefabBoard.transform.localScale.x / 2, 0, -_goSettings.prefabBoard.transform.localScale.z / 2);
+            _pawnOffset = new Vector3(_offset.x, 0, -_offset.z);
+            Debug.Log($"OFFSET: {_offset}, PAWNOFFSET: {_pawnOffset}, PPO: {_pawnOffset.x / 10}");
             _board = new Node[_goSettings.boardSize.x * _goSettings.boardSize.y];
 
             for (int x = 0; x < _goSettings.boardSize.x; x++)
@@ -65,7 +66,7 @@ namespace Go
                 for (int y = 0; y > -_goSettings.boardSize.y; y--)
                 {
                     int _convertMatrixToLine = (_goSettings.boardSize.x * Mathf.Abs(y)) + x;
-                    Vector3 newPos = new Vector3(x / _goSettings.cellsSize - (_pawnOffset.x - 0.05f), 0.5f, y / _goSettings.cellsSize + (_pawnOffset.y - 0.05f));
+                    Vector3 newPos = new Vector3(x / _goSettings.cellsSize - (_pawnOffset.x - 0.05f), 0.5f, y / _goSettings.cellsSize + (_pawnOffset.z - 0.05f));
                     GameObject t = Instantiate(_goSettings.prefabPositionAB, newPos, Quaternion.identity, gameObject.transform);
                     //GameObject t = new GameObject();
                     
@@ -80,7 +81,10 @@ namespace Go
         
         public void PawnInitialization(Node n)
         {
-            n.pawnType = (NodeType)Random.Range(0, 2);
+            if(n.isClosed) return;
+
+            n.isClosed = true;
+            n.pawnType = (NodeType)Random.Range(1, 3);
             n.pawn = Instantiate(n.pawnType == NodeType.PawnA ? _goSettings.prefabPawnA : _goSettings.prefabPawnB, n.pawnPosition.transform.position, Quaternion.identity, n.pawnPosition.transform);
             n.pawn.transform.localScale = new Vector3(_goSettings.pawnsSize, 1, _goSettings.pawnsSize);
         }
