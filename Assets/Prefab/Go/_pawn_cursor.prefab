@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1825274367803880292}
   m_Layer: 0
-  m_Name: _pawnB
+  m_Name: _pawn_cursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,7 +93,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f2da11874535a7b449cf189fead477da, type: 2}
+  - {fileID: 2100000, guid: 6d5728f50f24ad14fac23cfe57d4c0ef, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
