@@ -6,14 +6,15 @@ namespace Go
     [Serializable]
     public class Node
     {
-        public Go go;
-        
-        public NodeType pawnType;
         public int index;
         public bool isClosed;
-
+        public NodeType pawnType;
+        
+        public Go go;
         public GameObject pawn;
         public GameObject pawnPosition;
+
+        public Node[] neighbours;
 
         public Node(Go go, int index, GameObject pawnPosition)
         {

@@ -49,13 +49,10 @@ namespace Go
                 {
                     if(_convertMatrixToLine < _board.Length) PawnInitialization(_board[_convertMatrixToLine]);
                 
-                    Debug.Log($"HIT: {hit.point}, OHIT: {_offsetHitPoint}, CHIT: {_convertHitPoint}, CMTL: {_convertMatrixToLine}, T: {new Vector3(hit.point.x * _convertHitPoint.x, hit.point.y, hit.point.z * _convertHitPoint.y)}");
                     Debug.DrawLine(r.origin, hit.point, Color.red, 10);
                 }
                 else if (_convertMatrixToLine < _board.Length)
                 {
-                    Debug.Log($"HIT: {hit.point}, OHIT: {_offsetHitPoint}, CHIT: {_convertHitPoint}, CMTL: {_convertMatrixToLine}, T: {new Vector3(hit.point.x * _convertHitPoint.x, hit.point.y, hit.point.z * _convertHitPoint.y)}");
-
                     _pawnCursor.SetActive(true);
                     _pawnCursor.transform.position = _board[_convertMatrixToLine].pawnPosition.transform.position;
                 }
@@ -63,7 +60,7 @@ namespace Go
                 {
                     _pawnCursor.SetActive(false);
                 }
-                
+                Debug.DrawLine(r.origin, hit.point, Color.blue, 0);
             }
             else
             {
@@ -82,8 +79,6 @@ namespace Go
             _offset = new Vector3(_goSettings.prefabBoard.transform.localScale.x / 2, 0, -_goSettings.prefabBoard.transform.localScale.z / 2);
             _pawnOffset = new Vector3(_offset.x, 0, -_offset.z);
             _board = new Node[_goSettings.boardSize.x * _goSettings.boardSize.y];
-            
-            Debug.Log($"OFFSET: {_offset}, PAWNOFFSET: {_pawnOffset}, PPO: {_pawnOffset.x / 10}");
 
             for (int x = 0; x < _goSettings.boardSize.x; x++)
             {
