@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1825274367803880292}
   m_Layer: 0
-  m_Name: _pawnB
+  m_Name: _pawnAB
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
@@ -93,7 +93,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f2da11874535a7b449cf189fead477da, type: 2}
+  - {fileID: 2100000, guid: 247b89cfbc606274e9e4a9f665efb078, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -507,8 +507,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d16ea766e686106408ec050e76c32e3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _goSettings: {fileID: 0}
-  _board: []
+  goSettings: {fileID: 444991625}
+  board: []
 --- !u!114 &444991625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,8 +532,9 @@ MonoBehaviour:
   pawnsSize: 0
   boardMaterial: {fileID: 2100000, guid: b2f689e0e9152c044bc76a7d1d4bd658, type: 2}
   prefabBoard: {fileID: 1494517930}
-  boardSize: {x: 13, y: 13}
-  cellsSize: 10
+  boardSize: {x: 10, y: 10}
+  cellsSize: 20
+  cellsCoefSize: 1.15
 --- !u!1 &539469392
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,6 +967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _persistent: 1
   localPlayerCamera: {fileID: 330585545}
+  mainGame: {fileID: 444991624}
 --- !u!1 &1895212243
 GameObject:
   m_ObjectHideFlags: 0

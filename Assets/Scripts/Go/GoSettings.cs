@@ -6,10 +6,9 @@ namespace Go
     public class GoSettings : MonoBehaviour
     {
         [Header("Pawns")]
-        public GameObject prefabPawnA;
-        public GameObject prefabPawnB;
         public GameObject prefabPawnCursor;
-        public GameObject prefabPositionAB;
+        public GameObject prefabPawnAB;
+        public Material materialPawnA, materialPawnB;
         public float pawnsSize;
 
         [Header("Board")] 
@@ -18,5 +17,7 @@ namespace Go
         public Vector2Int boardSize;
         [Range(2, 20)]
         public float cellsSize;
+        [Range(1, 10)]
+        public float cellsCoefSize;
     }
 }
