@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Go
 {
@@ -12,6 +11,7 @@ namespace Go
         public float pawnsSize;
 
         [Header("Board")] 
+        [SerializeField]
         public Material boardMaterial;
         public GameObject prefabBoard;
         public Vector2Int boardSize;

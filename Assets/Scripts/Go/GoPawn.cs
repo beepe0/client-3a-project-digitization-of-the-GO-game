@@ -1,4 +1,5 @@
 ﻿using System;
+using CustomEditor.Attributes;
 using UnityEngine;
 
 namespace Go
@@ -6,13 +7,13 @@ namespace Go
     [Serializable]
     public class GoPawn
     { 
-        public int index;
-        public bool isClosed;
-        public NodeType pawnType;
+        [ReadOnlyInspector] public int index;
+        [ReadOnlyInspector] public bool isClosed;
+        [ReadOnlyInspector] public NodeType pawnType;
 
-        public GameObject pawnObject;
-        public MeshRenderer pawnMeshRenderer;
-        public Vector3 pawnPosition;
+        [ReadOnlyInspector] public GameObject pawnObject;
+        [ReadOnlyInspector] public MeshRenderer pawnMeshRenderer;
+        [ReadOnlyInspector] public Vector3 pawnPosition;
         
         [NonSerialized]
         public GoGame MainGame;
@@ -36,6 +37,18 @@ namespace Go
             this.pawnObject = pawnObject;
             this.pawnPosition = pawnObject.transform.position;
             this.pawnMeshRenderer = pawnObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
+        }
+
+        public ushort GetNumberOfEmptyNeighbors()
+        {
+            ushort count = 0;
+            foreach (GoPawn node in Neighbours)
+            {
+                if (node.isClosed) continue;
+                count++;
+            }
+
+            return count;
         }
     }
 

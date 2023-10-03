@@ -23,12 +23,17 @@ namespace Player
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     Debug.DrawLine(r.origin, hitInfo.point, Color.red, 10);
-                    mainGame.PawnInitialization(r, hitInfo);
+                    mainGame.Rules.PawnInitialization(NodeType.PawnA, new Vector2(hitInfo.point.x, hitInfo.point.z));
+                }
+                else if (Input.GetKeyDown(KeyCode.Mouse1))
+                {
+                    Debug.DrawLine(r.origin, hitInfo.point, Color.red, 10);
+                    mainGame.Rules.PawnInitialization(NodeType.PawnB, new Vector2(hitInfo.point.x, hitInfo.point.z));
                 }
                 else
                 {
                     Debug.DrawLine(r.origin, hitInfo.point, Color.blue, 0);
-                    mainGame.ShowCursor(r, hitInfo);
+                    mainGame.ShowCursor(new Vector2(hitInfo.point.x, hitInfo.point.z));
                 }
                 
             }

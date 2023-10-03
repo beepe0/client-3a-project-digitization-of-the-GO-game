@@ -14,7 +14,6 @@ public class ApplicationSettings : Singleton<ApplicationSettings>
     [SerializeField]
     private bool isVisibleCursor;
     
-    
     protected override void OnAwake()
     {
         Application.targetFrameRate = frameRate;

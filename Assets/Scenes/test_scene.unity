@@ -471,7 +471,9 @@ GameObject:
   m_Component:
   - component: {fileID: 444991623}
   - component: {fileID: 444991625}
-  - component: {fileID: 444991624}
+  - component: {fileID: 444991628}
+  - component: {fileID: 444991627}
+  - component: {fileID: 444991626}
   m_Layer: 0
   m_Name: _board
   m_TagString: Untagged
@@ -495,20 +497,6 @@ Transform:
   - {fileID: 1494517931}
   m_Father: {fileID: 613553649}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &444991624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 444991622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d16ea766e686106408ec050e76c32e3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  goSettings: {fileID: 444991625}
-  board: []
 --- !u!114 &444991625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,20 +509,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfbe2695311743bea615925dad77a747, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabPawnA: {fileID: 5483565497216186689, guid: 72596c824c553ba4bb984d678f7630e0,
-    type: 3}
-  prefabPawnB: {fileID: 5483565497216186689, guid: 063119b9480eb034b85ff57b9a7d5436,
-    type: 3}
   prefabPawnCursor: {fileID: 5483565497216186689, guid: 623afea6e87d834448034149ff3c958d,
     type: 3}
-  prefabPositionAB: {fileID: 2052789968334861471, guid: edf1947401f898c45bc5f6a7e92baecc,
+  prefabPawnAB: {fileID: 5483565497216186689, guid: abd6cc378d84fe74299a8845cfa617c4,
     type: 3}
+  materialPawnA: {fileID: 2100000, guid: c20e89a28b7a43f46884affc9e539fa9, type: 2}
+  materialPawnB: {fileID: 2100000, guid: f2da11874535a7b449cf189fead477da, type: 2}
   pawnsSize: 0
   boardMaterial: {fileID: 2100000, guid: b2f689e0e9152c044bc76a7d1d4bd658, type: 2}
   prefabBoard: {fileID: 1494517930}
   boardSize: {x: 10, y: 10}
-  cellsSize: 20
+  cellsSize: 10
   cellsCoefSize: 1.15
+--- !u!114 &444991626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444991622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6228376122d4d4ea455f85e23c14323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pawns: []
+  pawnCursor: {fileID: 0}
+  offset: {x: 0, y: 0}
+  pawnOffset: {x: 0, y: 0}
+--- !u!114 &444991627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444991622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d16ea766e686106408ec050e76c32e3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goSettings: {fileID: 0}
+  goRules: {fileID: 0}
+  goBoard: {fileID: 0}
+--- !u!114 &444991628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444991622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72dafe402733454f80eaba5d06bb7778, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &539469392
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,7 +996,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _persistent: 1
   localPlayerCamera: {fileID: 330585545}
-  mainGame: {fileID: 444991624}
+  mainGame: {fileID: 444991627}
 --- !u!1 &1895212243
 GameObject:
   m_ObjectHideFlags: 0
