@@ -44,7 +44,18 @@ namespace Go
             ushort count = 0;
             foreach (GoPawn node in Neighbours)
             {
-                if (node.isClosed) continue;
+                if (node == null || node.isClosed) continue;
+                count++;
+            }
+
+            return count;
+        }
+        public ushort GetNumberOfMyNeighbors()
+        {
+            ushort count = 0;
+            foreach (GoPawn node in Neighbours)
+            {
+                if (node == null || (node.isClosed && node.pawnType != this.pawnType)) continue;
                 count++;
             }
 

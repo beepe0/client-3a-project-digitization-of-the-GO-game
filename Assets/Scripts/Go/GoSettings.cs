@@ -7,7 +7,7 @@ namespace Go
         [Header("Pawns")]
         public GameObject prefabPawnCursor;
         public GameObject prefabPawnAB;
-        public Material materialPawnA, materialPawnB;
+        public Material materialPawnA, materialPawnB, materialPawnNone;
         public float pawnsSize;
 
         [Header("Board")] 

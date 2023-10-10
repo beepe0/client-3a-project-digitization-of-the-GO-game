@@ -75,6 +75,21 @@ namespace Go
                 n.pawnMeshRenderer.material = n.pawnType == NodeType.PawnA ? goSettings.materialPawnA : goSettings.materialPawnB;
                 n.pawnObject.transform.localScale = new Vector3(goSettings.pawnsSize, 0.5f, goSettings.pawnsSize);
                 n.pawnObject.SetActive(true);
+                UpdateBoard();
+            }
+        }
+
+        public void UpdateBoard()
+        {
+            foreach (GoPawn goPawn in goBoard.pawns)
+            {
+                if (goPawn.GetNumberOfEmptyNeighbors() == 0)
+                {
+                    goPawn.isClosed = false;
+                    goPawn.pawnType = NodeType.None;
+                    goPawn.pawnMeshRenderer.material = goSettings.materialPawnNone;
+                    goPawn.pawnObject.SetActive(false);
+                }
             }
         }
     }

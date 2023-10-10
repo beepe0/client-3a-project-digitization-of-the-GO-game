@@ -515,6 +515,7 @@ MonoBehaviour:
     type: 3}
   materialPawnA: {fileID: 2100000, guid: c20e89a28b7a43f46884affc9e539fa9, type: 2}
   materialPawnB: {fileID: 2100000, guid: f2da11874535a7b449cf189fead477da, type: 2}
+  materialPawnNone: {fileID: 2100000, guid: 247b89cfbc606274e9e4a9f665efb078, type: 2}
   pawnsSize: 0
   boardMaterial: {fileID: 2100000, guid: b2f689e0e9152c044bc76a7d1d4bd658, type: 2}
   prefabBoard: {fileID: 1494517930}
