@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CustomEditor.Attributes;
 using UnityEngine;
 
@@ -19,8 +20,10 @@ namespace Go
         public GoGame MainGame;
         [NonSerialized]
         public GoPawn[] Neighbours;
+        [NonSerialized]
+        public List<GoPawn> listOfConnectedNeighbours;
         [NonSerialized] 
-        public static Vector2[] OffsetNeigh =
+        public static Vector2[] OffsetNeighbours =
         {
             Vector2.right,
             Vector2.left,
@@ -39,7 +42,7 @@ namespace Go
             this.pawnMeshRenderer = pawnObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
         }
 
-        public ushort GetNumberOfEmptyNeighbors()
+        public ushort GetNumberOfEmptyNeighbours()
         {
             ushort count = 0;
             foreach (GoPawn node in Neighbours)
@@ -50,7 +53,19 @@ namespace Go
 
             return count;
         }
-        public ushort GetNumberOfMyNeighbors()
+        public ushort GetNumberOfMyNeighbours()
+        {
+            ushort count = 0;
+            foreach (GoPawn node in Neighbours)
+            {
+                if (node == null || (node.pawnType != this.pawnType)) continue;
+                count++;
+            }
+
+            return count;
+        }
+        
+        public ushort GetNumberOfMyNeighboursAndEmpty()
         {
             ushort count = 0;
             foreach (GoPawn node in Neighbours)
@@ -60,6 +75,16 @@ namespace Go
             }
 
             return count;
+        }
+        
+        public GoPawn GetFirstMyNeighbour()
+        {
+            foreach (GoPawn node in Neighbours)
+            {
+                if (node != null && (node.pawnType == this.pawnType)) return node;
+            }
+
+            return null;
         }
     }
 

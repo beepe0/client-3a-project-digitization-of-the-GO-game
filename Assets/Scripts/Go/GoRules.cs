@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Go
 {
@@ -37,7 +38,7 @@ namespace Go
                     
                     for(ushort i = 0; i < 4; i++)
                     {
-                        short mtl = GoTools.ConvertMatrixToLine(goSettings.boardSize, new Vector2(x + GoPawn.OffsetNeigh[i].x, y + GoPawn.OffsetNeigh[i].y));
+                        short mtl = GoTools.ConvertMatrixToLine(goSettings.boardSize, new Vector2(x + GoPawn.OffsetNeighbours[i].x, y + GoPawn.OffsetNeighbours[i].y));
                         node.Neighbours[i] = mtl >= 0 && mtl < goBoard.pawns.Length ? goBoard.pawns[mtl] : null;
                     }
                     
@@ -53,7 +54,7 @@ namespace Go
                     
                     for(ushort i = 0; i < 4; i++)
                     {
-                        short mtl = GoTools.ConvertMatrixToLine(goSettings.boardSize, new Vector2(x + GoPawn.OffsetNeigh[i].x, y + GoPawn.OffsetNeigh[i].y));
+                        short mtl = GoTools.ConvertMatrixToLine(goSettings.boardSize, new Vector2(x + GoPawn.OffsetNeighbours[i].x, y + GoPawn.OffsetNeighbours[i].y));
                         goBoard.pawns[convertMatrixToLine].Neighbours[i] = mtl >= 0 && mtl < goBoard.pawns.Length ? goBoard.pawns[mtl] : null;
                     }
                 }
@@ -83,12 +84,17 @@ namespace Go
         {
             foreach (GoPawn goPawn in goBoard.pawns)
             {
-                if (goPawn.GetNumberOfEmptyNeighbors() == 0)
+                if (goPawn.GetNumberOfMyNeighboursAndEmpty() == 0)
                 {
                     goPawn.isClosed = false;
                     goPawn.pawnType = NodeType.None;
                     goPawn.pawnMeshRenderer.material = goSettings.materialPawnNone;
                     goPawn.pawnObject.SetActive(false);
+                }
+                else if(goPawn.GetNumberOfEmptyNeighbours() == 4)
+                {
+                    goPawn.listOfConnectedNeighbours = new List<GoPawn>();
+                    goPawn.listOfConnectedNeighbours.Add(goPawn);
                 }
             }
         }
