@@ -67,16 +67,7 @@ namespace Go
 
             if (convertMatrixToLine >= 0 && convertMatrixToLine < goBoard.pawns.Length)
             {
-                GoPawn n = goBoard.pawns[convertMatrixToLine];
-
-                if (n.isClosed) return;
-                
-                n.isClosed = true;
-                n.pawnType = pawnType;
-                n.pawnMeshRenderer.material = n.pawnType == NodeType.PawnA ? goSettings.materialPawnA : goSettings.materialPawnB;
-                n.pawnObject.transform.localScale = new Vector3(goSettings.pawnsSize, 0.5f, goSettings.pawnsSize);
-                n.pawnObject.SetActive(true);
-                UpdateBoard();
+                goBoard.pawns[convertMatrixToLine].OpenMe(pawnType);
             }
         }
 
@@ -84,17 +75,34 @@ namespace Go
         {
             foreach (GoPawn goPawn in goBoard.pawns)
             {
-                if (goPawn.GetNumberOfMyNeighboursAndEmpty() == 0)
+                ushort numberOfEmptyNeighbours = goPawn.GetNumberOfEmptyNeighbours();
+                ushort numberOfMyNeighbours = goPawn.GetNumberOfMyNeighbours();
+                ushort numberOfEnemyNeighbours = goPawn.GetNumberOfEnemyNeighbours();
+                ushort numberOfNeighbours = goPawn.GetNumberOfNeighbours();
+
+                if(goPawn.isClosed)
+                Debug.Log($"NOEN: {numberOfEmptyNeighbours}, NOMN: {numberOfMyNeighbours}, NOENN: {numberOfEnemyNeighbours}, NON: {numberOfNeighbours}");
+
+                if (goPawn.isClosed && goPawn.listOfConnectedNeighbours == null && (numberOfEmptyNeighbours == numberOfNeighbours || (numberOfEmptyNeighbours + numberOfEnemyNeighbours) == numberOfNeighbours))
                 {
-                    goPawn.isClosed = false;
-                    goPawn.pawnType = NodeType.None;
-                    goPawn.pawnMeshRenderer.material = goSettings.materialPawnNone;
-                    goPawn.pawnObject.SetActive(false);
+                    goPawn.listOfConnectedNeighbours = new List<GoPawn>{goPawn};
                 }
-                else if(goPawn.GetNumberOfEmptyNeighbours() == 4)
+                if (goPawn.isClosed && goPawn.listOfConnectedNeighbours == null && numberOfMyNeighbours > 0)
                 {
-                    goPawn.listOfConnectedNeighbours = new List<GoPawn>();
-                    goPawn.listOfConnectedNeighbours.Add(goPawn);
+                    foreach (GoPawn gp in goPawn.Neighbours)
+                    {
+                        if (gp != null && gp.pawnType == goPawn.pawnType)
+                        {
+                            goPawn.listOfConnectedNeighbours = gp.listOfConnectedNeighbours;
+                            goPawn.listOfConnectedNeighbours.Add(goPawn);
+                            break;
+                        }
+                    }
+                }
+				
+				if(goPawn.listOfConnectedNeighbours != null && goPawn.listOfConnectedNeighbours.Count > 5)
+                {
+                    goPawn.RemoveAllFromListOfConnectedNeighbours();
                 }
             }
         }

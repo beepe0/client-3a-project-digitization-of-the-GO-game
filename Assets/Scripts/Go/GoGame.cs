@@ -8,9 +8,9 @@ namespace Go
     [RequireComponent(typeof(GoBoard))]
     public class GoGame : MonoBehaviour
     {
-        [SerializeField] private GoSettings goSettings;
-        [SerializeField] private GoRules goRules;
-        [SerializeField] private GoBoard goBoard;
+        [SerializeField] public GoSettings goSettings;
+        [SerializeField] public GoRules goRules;
+        [SerializeField] public GoBoard goBoard;
 
         private void Awake()
         {

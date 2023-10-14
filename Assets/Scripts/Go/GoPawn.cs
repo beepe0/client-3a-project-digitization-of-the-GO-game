@@ -41,6 +41,28 @@ namespace Go
             this.pawnPosition = pawnObject.transform.position;
             this.pawnMeshRenderer = pawnObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
         }
+		
+		public void CloseMe()
+		{
+			this.isClosed = false;
+            this.pawnType = NodeType.None;
+            this.pawnMeshRenderer.material = MainGame.goSettings.materialPawnNone;
+            this.listOfConnectedNeighbours = null;
+            this.pawnObject.SetActive(false);
+		}
+
+		public void OpenMe(NodeType nodeType)
+		{
+            if (this.isClosed) return;
+            
+			this.isClosed = true;
+            this.pawnType = nodeType;
+            this.pawnMeshRenderer.material = nodeType == NodeType.PawnA ? MainGame.goSettings.materialPawnA : MainGame.goSettings.materialPawnB;
+            this.pawnObject.transform.localScale = new Vector3(MainGame.goSettings.pawnsSize, 0.5f, MainGame.goSettings.pawnsSize);
+            this.pawnObject.SetActive(true);
+            
+            this.MainGame.goRules.UpdateBoard();
+		}
 
         public ushort GetNumberOfEmptyNeighbours()
         {
@@ -64,6 +86,18 @@ namespace Go
 
             return count;
         }
+
+        public ushort GetNumberOfEnemyNeighbours()
+        {
+            ushort count = 0;
+            foreach (GoPawn node in Neighbours)
+            {
+                if (node == null || (node.pawnType == this.pawnType || node.pawnType == NodeType.None)) continue;
+                count++;
+            }
+
+            return count;
+        }
         
         public ushort GetNumberOfMyNeighboursAndEmpty()
         {
@@ -71,6 +105,18 @@ namespace Go
             foreach (GoPawn node in Neighbours)
             {
                 if (node == null || (node.isClosed && node.pawnType != this.pawnType)) continue;
+                count++;
+            }
+
+            return count;
+        }
+
+        public ushort GetNumberOfNeighbours()
+        {
+            ushort count = 0;
+            foreach (GoPawn node in Neighbours)
+            {
+                if (node == null) continue;
                 count++;
             }
 
@@ -85,6 +131,14 @@ namespace Go
             }
 
             return null;
+        }
+		
+		public void RemoveAllFromListOfConnectedNeighbours()
+		{
+            foreach (GoPawn gp in listOfConnectedNeighbours)
+            {
+                gp.CloseMe();
+            }
         }
     }
 
