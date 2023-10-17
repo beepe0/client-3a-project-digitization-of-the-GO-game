@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Go
@@ -73,36 +75,35 @@ namespace Go
 
         public void UpdateBoard()
         {
+            List<GoPawn> tempOfMyNeighbours = new List<GoPawn>();
             foreach (GoPawn goPawn in goBoard.pawns)
             {
                 ushort numberOfEmptyNeighbours = goPawn.GetNumberOfEmptyNeighbours();
                 ushort numberOfMyNeighbours = goPawn.GetNumberOfMyNeighbours();
                 ushort numberOfEnemyNeighbours = goPawn.GetNumberOfEnemyNeighbours();
                 ushort numberOfNeighbours = goPawn.GetNumberOfNeighbours();
-
-                if(goPawn.isClosed)
-                Debug.Log($"NOEN: {numberOfEmptyNeighbours}, NOMN: {numberOfMyNeighbours}, NOENN: {numberOfEnemyNeighbours}, NON: {numberOfNeighbours}");
-
+                
                 if (goPawn.isClosed && goPawn.listOfConnectedNeighbours == null && (numberOfEmptyNeighbours == numberOfNeighbours || (numberOfEmptyNeighbours + numberOfEnemyNeighbours) == numberOfNeighbours))
                 {
                     goPawn.listOfConnectedNeighbours = new List<GoPawn>{goPawn};
+                    goPawn.lider = goPawn;
                 }
-                if (goPawn.isClosed && goPawn.listOfConnectedNeighbours == null && numberOfMyNeighbours > 0)
+                else if (goPawn.isClosed && goPawn.lider == null && numberOfMyNeighbours > 0)
                 {
-                    foreach (GoPawn gp in goPawn.Neighbours)
-                    {
-                        if (gp != null && gp.pawnType == goPawn.pawnType)
-                        {
-                            goPawn.listOfConnectedNeighbours = gp.listOfConnectedNeighbours;
-                            goPawn.listOfConnectedNeighbours.Add(goPawn);
-                            break;
-                        }
-                    }
+                    GoPawn betterOption = goPawn.GetBetterMyNeighbourOption();
+                    betterOption.lider.listOfConnectedNeighbours.Add(goPawn);
+                    goPawn.lider = betterOption.lider;
+                    // foreach (var item in tempOfMyNeighbours.Select((value, i) => new { i, value }))
+                    // {
+                    //     var value = item.value;
+                    //     var index = item.i;
+                    //     Debug.Log(index);
+                    // }
                 }
 				
-				if(goPawn.listOfConnectedNeighbours != null && goPawn.listOfConnectedNeighbours.Count > 5)
+				if(goPawn.lider != null && goPawn.lider.listOfConnectedNeighbours != null && goPawn.lider.listOfConnectedNeighbours.Count > 5)
                 {
-                    goPawn.RemoveAllFromListOfConnectedNeighbours();
+                    goPawn.lider.RemoveAllFromListOfConnectedNeighbours();
                 }
             }
         }

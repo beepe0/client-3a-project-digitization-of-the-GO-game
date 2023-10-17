@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CustomEditor.Attributes;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ namespace Go
         public GoPawn[] Neighbours;
         [NonSerialized]
         public List<GoPawn> listOfConnectedNeighbours;
+        [NonSerialized]
+        public GoPawn lider;
         [NonSerialized] 
         public static Vector2[] OffsetNeighbours =
         {
@@ -48,6 +51,7 @@ namespace Go
             this.pawnType = NodeType.None;
             this.pawnMeshRenderer.material = MainGame.goSettings.materialPawnNone;
             this.listOfConnectedNeighbours = null;
+            this.lider = null;
             this.pawnObject.SetActive(false);
 		}
 
@@ -132,8 +136,32 @@ namespace Go
 
             return null;
         }
-		
-		public void RemoveAllFromListOfConnectedNeighbours()
+
+        public GoPawn GetBetterMyNeighbourOption()
+        {
+            int indexBestOption;
+            GoPawn bestOption;
+            List<GoPawn> tempOfMyNeighbours = new List<GoPawn>();
+            
+            tempOfMyNeighbours.AddRange(this.Neighbours.Where(e => (e != null && e.pawnType == this.pawnType)));
+            indexBestOption = tempOfMyNeighbours.FindIndex(e =>
+                e.lider.listOfConnectedNeighbours.Count ==
+                tempOfMyNeighbours.Max(v => v.lider.listOfConnectedNeighbours.Count));
+            bestOption = tempOfMyNeighbours[indexBestOption];
+
+            for (int i = 0; i < tempOfMyNeighbours.Count; i++)
+            {
+                if (tempOfMyNeighbours.Count > 1 && i != indexBestOption && bestOption.lider.listOfConnectedNeighbours != tempOfMyNeighbours[i].lider.listOfConnectedNeighbours)
+                {
+                    bestOption.lider.listOfConnectedNeighbours.AddRange(tempOfMyNeighbours[i].lider.listOfConnectedNeighbours);
+                    tempOfMyNeighbours[i].lider.listOfConnectedNeighbours = null;
+                    tempOfMyNeighbours[i].lider = bestOption.lider;
+                }
+            }
+            return bestOption;
+        }
+
+        public void RemoveAllFromListOfConnectedNeighbours()
 		{
             foreach (GoPawn gp in listOfConnectedNeighbours)
             {
