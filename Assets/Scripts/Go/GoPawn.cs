@@ -154,20 +154,23 @@ namespace Go
                 if (tempOfMyNeighbours.Count > 1 && i != indexBestOption && bestOption.lider.listOfConnectedNeighbours != tempOfMyNeighbours[i].lider.listOfConnectedNeighbours)
                 {
                     bestOption.lider.listOfConnectedNeighbours.AddRange(tempOfMyNeighbours[i].lider.listOfConnectedNeighbours);
-                    tempOfMyNeighbours[i].lider.listOfConnectedNeighbours = null;
+                    tempOfMyNeighbours[i].lider.listOfConnectedNeighbours = bestOption.lider.listOfConnectedNeighbours;
                     tempOfMyNeighbours[i].lider = bestOption.lider;
                 }
             }
             return bestOption;
         }
 
-        public void RemoveAllFromListOfConnectedNeighbours()
-		{
-            foreach (GoPawn gp in listOfConnectedNeighbours)
+        public bool CanLive()
+        {
+            foreach(GoPawn gp in lider.listOfConnectedNeighbours)
             {
-                gp.CloseMe();
+                if(gp.GetNumberOfEmptyNeighbours() > 0) return true;
             }
+            return false;
         }
+
+        public void RemoveAllFromListOfConnectedNeighbours() => listOfConnectedNeighbours.ForEach(e => e.CloseMe());
     }
 
     public enum NodeType : byte
