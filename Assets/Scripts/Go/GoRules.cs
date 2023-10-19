@@ -65,18 +65,14 @@ namespace Go
         
         public void PawnInitialization(NodeType pawnType, Vector2 xy)
         {
+            GoPawn goPawn;
             short convertMatrixToLine = GoTools.ConvertRayToLine(xy, goBoard.offset, goSettings.boardSize, goSettings.cellsSize);
-            GoPawn gp = goBoard.pawns[convertMatrixToLine];
-            if (convertMatrixToLine >= 0 && convertMatrixToLine < goBoard.pawns.Length && gp.CanLive())
+            
+            if (convertMatrixToLine >= 0 && convertMatrixToLine < goBoard.pawns.Length)
             {
-                gp.OpenMe(pawnType);
-            }
-        }
-
-        public void UpdateBoard()
-        {
-            foreach (GoPawn goPawn in goBoard.pawns)
-            {
+                goPawn = goBoard.pawns[convertMatrixToLine].OpenMe(pawnType);
+                if (goPawn == null) return;
+                
                 ushort numberOfEmptyNeighbours = goPawn.GetNumberOfEmptyNeighbours();
                 ushort numberOfMyNeighbours = goPawn.GetNumberOfMyNeighbours();
                 ushort numberOfEnemyNeighbours = goPawn.GetNumberOfEnemyNeighbours();
@@ -92,11 +88,22 @@ namespace Go
                     GoPawn betterOption = goPawn.GetBetterMyNeighbourOption();
                     betterOption.lider.listOfConnectedNeighbours.Add(goPawn);
                     goPawn.lider = betterOption.lider;
+                    if (!betterOption.CanLive())
+                    {
+                        betterOption.lider.listOfConnectedNeighbours.Remove(goPawn);
+                        goPawn.CloseMe();
+                    }
                 }
             }
+            
+            UpdateBoard();
+        }
 
+        public void UpdateBoard()
+        {
             foreach (GoPawn goPawn in goBoard.pawns)
             {
+               
                 if(goPawn.lider != null && !goPawn.CanLive())
                 {
                     goPawn.lider.RemoveAllFromListOfConnectedNeighbours();

@@ -53,11 +53,12 @@ namespace Go
             this.listOfConnectedNeighbours = null;
             this.lider = null;
             this.pawnObject.SetActive(false);
+            
 		}
 
-		public void OpenMe(NodeType nodeType)
+		public GoPawn OpenMe(NodeType nodeType)
 		{
-            if (this.isClosed) return;
+            if (this.isClosed) return null;
             
 			this.isClosed = true;
             this.pawnType = nodeType;
@@ -65,8 +66,8 @@ namespace Go
             this.pawnObject.transform.localScale = new Vector3(MainGame.goSettings.pawnsSize, 0.5f, MainGame.goSettings.pawnsSize);
             this.pawnObject.SetActive(true);
             
-            this.MainGame.goRules.UpdateBoard();
-		}
+            return this;
+        }
 
         public ushort GetNumberOfEmptyNeighbours()
         {
@@ -158,6 +159,7 @@ namespace Go
                     tempOfMyNeighbours[i].lider = bestOption.lider;
                 }
             }
+
             return bestOption;
         }
 

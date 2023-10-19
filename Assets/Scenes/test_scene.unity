@@ -534,7 +534,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6228376122d4d4ea455f85e23c14323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pawns: []
+  pawns:
+  - index: 0
+    isClosed: 0
+    pawnType: 0
+    pawnObject: {fileID: 0}
+    pawnMeshRenderer: {fileID: 0}
+    pawnPosition: {x: 0, y: 0, z: 0}
   pawnCursor: {fileID: 0}
   offset: {x: 0, y: 0}
   pawnOffset: {x: 0, y: 0}
@@ -773,7 +779,7 @@ Transform:
   m_GameObject: {fileID: 832575517}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 4.415406e+15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
