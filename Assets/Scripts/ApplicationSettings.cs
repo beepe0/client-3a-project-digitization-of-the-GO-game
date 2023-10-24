@@ -1,4 +1,5 @@
 ﻿using Player;
+using Singleton;
 using UnityEngine;
 
 public class ApplicationSettings : Singleton<ApplicationSettings>

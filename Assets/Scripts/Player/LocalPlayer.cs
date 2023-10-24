@@ -1,4 +1,5 @@
 ﻿using Go;
+using Singleton;
 using UnityEngine;
 
 namespace Player
