@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Go
@@ -88,11 +86,6 @@ namespace Go
                     GoPawn betterOption = goPawn.GetBetterMyNeighbourOption();
                     betterOption.lider.listOfConnectedNeighbours.Add(goPawn);
                     goPawn.lider = betterOption.lider;
-                    if (!betterOption.CanLive())
-                    {
-                        betterOption.lider.listOfConnectedNeighbours.Remove(goPawn);
-                        goPawn.CloseMe();
-                    }
                 }
             }
             
@@ -101,9 +94,9 @@ namespace Go
 
         public void UpdateBoard()
         {
-            foreach (GoPawn goPawn in goBoard.pawns)
+            for (int i = 0; i < goBoard.openPawns.Count && goBoard.openPawns.Count > 0; i++)
             {
-               
+                GoPawn goPawn = goBoard.openPawns[i];
                 if(goPawn.lider != null && !goPawn.CanLive())
                 {
                     goPawn.lider.RemoveAllFromListOfConnectedNeighbours();

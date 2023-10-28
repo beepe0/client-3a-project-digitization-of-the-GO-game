@@ -10,6 +10,8 @@ namespace Player
 
         public GoGame mainGame;
 
+        private uint clicks = 0;
+
         private void Update() => MouseRaycast();
         
         private void MouseRaycast()
@@ -23,13 +25,9 @@ namespace Player
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    Debug.DrawLine(r.origin, hitInfo.point, Color.red, 10);
-                    mainGame.Rules.PawnInitialization(NodeType.PawnA, new Vector2(hitInfo.point.x, hitInfo.point.z));
-                }
-                else if (Input.GetKeyDown(KeyCode.Mouse1))
-                {
-                    Debug.DrawLine(r.origin, hitInfo.point, Color.red, 10);
-                    mainGame.Rules.PawnInitialization(NodeType.PawnB, new Vector2(hitInfo.point.x, hitInfo.point.z));
+                    Debug.DrawLine(r.origin, hitInfo.point, (clicks % 2 == 0) ? Color.red : Color.green, 10);
+                    mainGame.Rules.PawnInitialization((clicks % 2 == 0) ? NodeType.PawnA : NodeType.PawnB, new Vector2(hitInfo.point.x, hitInfo.point.z));
+                    clicks++;
                 }
                 else
                 {

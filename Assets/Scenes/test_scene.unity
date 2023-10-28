@@ -541,6 +541,7 @@ MonoBehaviour:
     pawnObject: {fileID: 0}
     pawnMeshRenderer: {fileID: 0}
     pawnPosition: {x: 0, y: 0, z: 0}
+  openPawns: []
   pawnCursor: {fileID: 0}
   offset: {x: 0, y: 0}
   pawnOffset: {x: 0, y: 0}
@@ -973,7 +974,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1568964363
 MonoBehaviour:
   m_ObjectHideFlags: 0

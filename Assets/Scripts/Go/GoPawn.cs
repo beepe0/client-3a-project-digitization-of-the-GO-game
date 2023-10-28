@@ -9,7 +9,7 @@ namespace Go
     [Serializable]
     public class GoPawn
     { 
-        [ReadOnlyInspector] public int index;
+        [ReadOnlyInspector] public ushort index;
         [ReadOnlyInspector] public bool isClosed;
         [ReadOnlyInspector] public NodeType pawnType;
 
@@ -39,14 +39,14 @@ namespace Go
             this.Neighbours = new GoPawn[4];
                 
             this.MainGame = mainGame;
-            this.index = index;
             this.pawnObject = pawnObject;
             this.pawnPosition = pawnObject.transform.position;
             this.pawnMeshRenderer = pawnObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
         }
 		
 		public void CloseMe()
-		{
+        {
+            this.index = 0;
 			this.isClosed = false;
             this.pawnType = NodeType.None;
             this.pawnMeshRenderer.material = MainGame.goSettings.materialPawnNone;
@@ -54,17 +54,21 @@ namespace Go
             this.lider = null;
             this.pawnObject.SetActive(false);
             
+            this.MainGame.goBoard.openPawns.Remove(this);
 		}
 
 		public GoPawn OpenMe(NodeType nodeType)
 		{
             if (this.isClosed) return null;
-            
+
+            this.index = (ushort)MainGame.goBoard.openPawns.Count;
 			this.isClosed = true;
             this.pawnType = nodeType;
             this.pawnMeshRenderer.material = nodeType == NodeType.PawnA ? MainGame.goSettings.materialPawnA : MainGame.goSettings.materialPawnB;
             this.pawnObject.transform.localScale = new Vector3(MainGame.goSettings.pawnsSize, 0.5f, MainGame.goSettings.pawnsSize);
             this.pawnObject.SetActive(true);
+            
+            this.MainGame.goBoard.openPawns.Add(this);
             
             return this;
         }
@@ -179,6 +183,7 @@ namespace Go
     {
         None,
         PawnA,
-        PawnB
+        PawnB,
+        Block
     }
 }
