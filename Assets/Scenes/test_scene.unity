@@ -519,7 +519,7 @@ MonoBehaviour:
   pawnsSize: 0
   boardMaterial: {fileID: 2100000, guid: b2f689e0e9152c044bc76a7d1d4bd658, type: 2}
   prefabBoard: {fileID: 1494517930}
-  boardSize: {x: 10, y: 10}
+  boardSize: {x: 7, y: 7}
   cellsSize: 10
   cellsCoefSize: 1.15
 --- !u!114 &444991626
@@ -536,7 +536,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pawns:
   - index: 0
+    blockTime: 0
     isClosed: 0
+    isBlocked: 0
     pawnType: 0
     pawnObject: {fileID: 0}
     pawnMeshRenderer: {fileID: 0}
@@ -545,6 +547,7 @@ MonoBehaviour:
   pawnCursor: {fileID: 0}
   offset: {x: 0, y: 0}
   pawnOffset: {x: 0, y: 0}
+  numberOfSteps: 0
 --- !u!114 &444991627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -974,7 +977,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1568964363
 MonoBehaviour:
   m_ObjectHideFlags: 0

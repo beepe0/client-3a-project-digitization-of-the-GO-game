@@ -10,7 +10,9 @@ namespace Go
     public class GoPawn
     { 
         [ReadOnlyInspector] public ushort index;
+        [ReadOnlyInspector] public uint blockTime;
         [ReadOnlyInspector] public bool isClosed;
+        [ReadOnlyInspector] public bool isBlocked;
         [ReadOnlyInspector] public NodeType pawnType;
 
         [ReadOnlyInspector] public GameObject pawnObject;
@@ -26,13 +28,7 @@ namespace Go
         [NonSerialized]
         public GoPawn lider;
         [NonSerialized] 
-        public static Vector2[] OffsetNeighbours =
-        {
-            Vector2.right,
-            Vector2.left,
-            Vector2.up,
-            Vector2.down,
-        };
+        public static Vector2[] OffsetNeighbours = { Vector2.right, Vector2.left, Vector2.up, Vector2.down };
         
         public GoPawn(GoGame mainGame, int index, GameObject pawnObject)
         {
@@ -48,9 +44,11 @@ namespace Go
         {
             this.index = 0;
 			this.isClosed = false;
+            this.isBlocked = this.lider.listOfConnectedNeighbours.Count == 1 && this.GetNumberOfEnemyNeighbours() == 4;
+            this.blockTime = this.isBlocked ? MainGame.goBoard.numberOfSteps + 2 : 0;
             this.pawnType = NodeType.None;
             this.pawnMeshRenderer.material = MainGame.goSettings.materialPawnNone;
-            this.listOfConnectedNeighbours = null;
+            // this.listOfConnectedNeighbours = null;
             this.lider = null;
             this.pawnObject.SetActive(false);
             
@@ -59,10 +57,12 @@ namespace Go
 
 		public GoPawn OpenMe(NodeType nodeType)
 		{
-            if (this.isClosed) return null;
-
+            Debug.Log($"BT: {this.blockTime}, NoS: {MainGame.goBoard.numberOfSteps}");
+            if (this.isClosed || (this.isBlocked && (this.blockTime - MainGame.goBoard.numberOfSteps) > 0)) return null;
+    
             this.index = (ushort)MainGame.goBoard.openPawns.Count;
-			this.isClosed = true;
+            this.isClosed = true;
+            this.isBlocked = false;
             this.pawnType = nodeType;
             this.pawnMeshRenderer.material = nodeType == NodeType.PawnA ? MainGame.goSettings.materialPawnA : MainGame.goSettings.materialPawnB;
             this.pawnObject.transform.localScale = new Vector3(MainGame.goSettings.pawnsSize, 0.5f, MainGame.goSettings.pawnsSize);
@@ -176,7 +176,8 @@ namespace Go
             return false;
         }
 
-        public void RemoveAllFromListOfConnectedNeighbours() => listOfConnectedNeighbours.ForEach(e => e.CloseMe());
+        public void RemoveAllFromListOfConnectedNeighbours() =>
+            listOfConnectedNeighbours.ForEach(e => e.CloseMe() );
     }
 
     public enum NodeType : byte
@@ -184,6 +185,5 @@ namespace Go
         None,
         PawnA,
         PawnB,
-        Block
     }
 }

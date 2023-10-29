@@ -12,5 +12,6 @@ namespace Go
         [ReadOnlyInspector] public GameObject pawnCursor;
         [ReadOnlyInspector] public Vector2 offset;
         [ReadOnlyInspector] public Vector2 pawnOffset;
+        [ReadOnlyInspector] public uint numberOfSteps;
     }
 } 

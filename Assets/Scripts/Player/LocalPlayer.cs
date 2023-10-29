@@ -7,13 +7,9 @@ namespace Player
     public class LocalPlayer : Singleton<LocalPlayer>
     {
         public Camera localPlayerCamera;
-
         public GoGame mainGame;
 
-        private uint clicks = 0;
-
         private void Update() => MouseRaycast();
-        
         private void MouseRaycast()
         {
             Vector3 mousePosition = Input.mousePosition;
@@ -25,9 +21,13 @@ namespace Player
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    Debug.DrawLine(r.origin, hitInfo.point, (clicks % 2 == 0) ? Color.red : Color.green, 10);
-                    mainGame.Rules.PawnInitialization((clicks % 2 == 0) ? NodeType.PawnA : NodeType.PawnB, new Vector2(hitInfo.point.x, hitInfo.point.z));
-                    clicks++;
+                    Debug.DrawLine(r.origin, hitInfo.point, (mainGame.goBoard.numberOfSteps % 2 == 0) ? Color.red : Color.green, 10);
+                    mainGame.Rules.PawnInitialization((mainGame.goBoard.numberOfSteps % 2 == 0) ? NodeType.PawnA : NodeType.PawnB, new Vector2(hitInfo.point.x, hitInfo.point.z));
+                }
+                else if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    Debug.Log("PASS");
+                    mainGame.Rules.PawnPass();
                 }
                 else
                 {

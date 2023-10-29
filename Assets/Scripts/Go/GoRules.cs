@@ -76,21 +76,32 @@ namespace Go
                 ushort numberOfEnemyNeighbours = goPawn.GetNumberOfEnemyNeighbours();
                 ushort numberOfNeighbours = goPawn.GetNumberOfNeighbours();
                 
-                if (goPawn.isClosed && goPawn.listOfConnectedNeighbours == null && (numberOfEmptyNeighbours == numberOfNeighbours || (numberOfEmptyNeighbours + numberOfEnemyNeighbours) == numberOfNeighbours))
+                if (goPawn.lider == null && (numberOfEmptyNeighbours == numberOfNeighbours || (numberOfEmptyNeighbours + numberOfEnemyNeighbours) == numberOfNeighbours))
                 {
                     goPawn.listOfConnectedNeighbours = new List<GoPawn>{goPawn};
                     goPawn.lider = goPawn;
                 }
-                else if (goPawn.isClosed && goPawn.lider == null && numberOfMyNeighbours > 0)
+                else if (goPawn.lider == null && numberOfMyNeighbours > 0)
                 {
                     GoPawn betterOption = goPawn.GetBetterMyNeighbourOption();
                     betterOption.lider.listOfConnectedNeighbours.Add(goPawn);
                     goPawn.lider = betterOption.lider;
                 }
+                
+                if (goPawn.lider != null)
+                { 
+                    if (!goPawn.CanLive() && goPawn.lider.listOfConnectedNeighbours.Count > 1)
+                    {
+                        goPawn.lider.listOfConnectedNeighbours.Remove(goPawn);
+                        goPawn.CloseMe();
+                    }else goBoard.numberOfSteps++;
+                }
             }
             
             UpdateBoard();
         }
+
+        public void PawnPass() => goBoard.numberOfSteps++;
 
         public void UpdateBoard()
         {
