@@ -1,16 +1,16 @@
-[submodule "Assets/Scripts/Network/UClient"]
-	path = Assets/Scripts/Network/UClient
-	url = https://github.com/beepe0/modules-for-my-projects.git
-	branch = unetclient
-[submodule "Assets/Scripts/Network/UNTools"]
-	path = Assets/Scripts/Network/UNTools
-	url = https://github.com/beepe0/modules-for-my-projects.git
-	branch = unettools
+[submodule "Assets/Scripts/Network/UnityClient"]
+	path = Assets/Scripts/Network/UnityClient
+	url = https://github.com/beepe0/modules.git
+	branch = network/unetclient
+[submodule "Assets/Scripts/Network/UnityTools"]
+	path = Assets/Scripts/Network/UnityTools
+	url = https://github.com/beepe0/modules.git
+	branch = network/unettools
 [submodule "Assets/Scripts/Singleton"]
 	path = Assets/Scripts/Singleton
-	url = https://github.com/beepe0/modules-for-my-projects.git
+	url = https://github.com/beepe0/modules.git
 	branch = singleton
 [submodule "Assets/Scripts/CustomEditor/Attributes"]
 	path = Assets/Scripts/CustomEditor/Attributes
-	url = https://github.com/beepe0/modules-for-my-projects.git
+	url = https://github.com/beepe0/modules.git
 	branch = custom-editor/attributes
