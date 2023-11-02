@@ -3,8 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Assets/Scripts/CustomEditor/Attributes" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Assets/Scripts/Network/UClient" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Assets/Scripts/Network/UNTools" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Assets/Scripts/Singleton" vcs="Git" />
   </component>
 </project>

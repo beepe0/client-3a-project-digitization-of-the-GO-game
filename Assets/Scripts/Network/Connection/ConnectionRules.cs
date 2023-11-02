@@ -1,33 +1,32 @@
-﻿using Network.UClient;
-using Network.UNTools;
-using UnityEditor.Rendering;
+﻿using Network.UnityClient;
+using Network.UnityTools;
 using UnityEngine;
 
 namespace Network.Connection
 {
-    public abstract class ConnectionRules
+    public sealed class ConnectionRules
     {
         public enum PacketType : ushort
         {
             OnWelcome,
             SynchronizePosition
         }
-        public class GeneralRules : UNetworkIORules.IGeneralRules
+        public class GeneralRules : UNetworkClientIORules.IGeneralRules
         {
             public void OnDisconnect()
             {
-                Debug.Log("A client disconnected!");
+                Debug.Log("The client is disconnected!");
             }
         }
-        public class InputRules : UNetworkIORules.IInputRules
+        public class InputRules : UNetworkClientIORules.IInputRules
         {
             public void OnWelcome(UNetworkReadablePacket inputPacket)
             {
                 Debug.Log($"ID: {inputPacket.Index}, LN: {inputPacket.Length}, PT: {(PacketType)inputPacket.PacketNumber}, DT: {inputPacket.ReadString()}");
-                UNetworkCore.OutputRules.OnWelcome();
+                //Connection.Instance.networkClientManager.Client.OutputRules.OnWelcome();
             }
         }
-        public class OutputRules : UNetworkIORules.IOutputRules
+        public class OutputRules : UNetworkClientIORules.IOutputRules
         {
             public void OnWelcome()
             {
@@ -35,7 +34,7 @@ namespace Network.Connection
                 
                 packet.Write("TEST123");
                 
-                UNetworkCore.DataHandler.Tcp.SendData(packet);
+                Connection.Instance.networkClientManager.Client.DataHandler.SendDataTcp(packet);
             }
             
             public void SynchronizePosition(Vector3 position)
@@ -46,7 +45,7 @@ namespace Network.Connection
                 packet.Write(position.y);
                 packet.Write(position.z);
                 
-                UNetworkCore.DataHandler.Udp.SendData(packet);
+                Connection.Instance.networkClientManager.Client.DataHandler.SendDataUpd(packet);
             }
         }
     }
