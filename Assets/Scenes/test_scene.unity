@@ -990,7 +990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff1853cce2ba72648af73c7aa68a9ace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _persistent: 1
+  dontDestroyOnLoad: 1
   serverPort: 12345
   serverInternetProtocol: 127.0.0.1
   receiveBufferSize: 512
@@ -1023,6 +1023,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _persistent: 1
+  networkClientManager: {fileID: 1568964363}
 --- !u!1 &1712664316
 GameObject:
   m_ObjectHideFlags: 0

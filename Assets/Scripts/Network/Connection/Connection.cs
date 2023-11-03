@@ -1,4 +1,6 @@
-﻿using Network.UnityClient;
+﻿using System;
+using Network.UnityClient;
+using Network.UnityClient.Handlers;
 using Singleton;
 using UnityEngine;
 
@@ -7,13 +9,32 @@ namespace Network.Connection
     public class Connection : Singleton<Connection>
     {
         [SerializeField] public UNetworkClientManager networkClientManager;
+
+        public UNetworkClientRulesHandler RulesHandler;
+        public UNetworkClientDataHandler DataHandler;
+        
+        public ConnectionRules.GeneralRules GeneralRules;
+        public ConnectionRules.InputRules InputRules;
+        public ConnectionRules.OutputRules OutputRules;
         private void Awake()
         {
-            networkClientManager.Client.RulesHandler.UpdateGeneralRules(new ConnectionRules.GeneralRules());
-            networkClientManager.Client.RulesHandler.UpdateInputRules(new ConnectionRules.InputRules());
-            networkClientManager.Client.RulesHandler.UpdateOutputRules(new ConnectionRules.OutputRules());
+            RulesHandler = networkClientManager.Client.RulesHandler;
+            DataHandler = networkClientManager.Client.DataHandler;
             
-            networkClientManager.Client.RulesHandler.AddNewRule((ushort)ConnectionRules.PacketType.OnWelcome, ((ConnectionRules.InputRules)networkClientManager.Client.InputRules).OnWelcome); 
+            RulesHandler.UpdateGeneralRules(new ConnectionRules.GeneralRules());
+            RulesHandler.UpdateInputRules(new ConnectionRules.InputRules());
+            RulesHandler.UpdateOutputRules(new ConnectionRules.OutputRules());
+            
+            GeneralRules = networkClientManager.Client.GeneralRules as ConnectionRules.GeneralRules;
+            InputRules = networkClientManager.Client.InputRules as ConnectionRules.InputRules;
+            OutputRules = networkClientManager.Client.OutputRules as ConnectionRules.OutputRules;
+
+            RulesHandler.AddNewRule((ushort)ConnectionRules.PacketType.HandShake, InputRules!.HandShake); 
+        }
+
+        private void Update()
+        {
+            //((ConnectionRules.OutputRules)Connection.Instance.networkClientManager.Client.OutputRules).SynchronizePosition(gameObject.transform.position);
         }
     }
 }
