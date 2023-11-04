@@ -1,5 +1,4 @@
-﻿using System;
-using Network.UnityClient;
+﻿using Network.UnityClient;
 using Network.UnityClient.Handlers;
 using Singleton;
 using UnityEngine;
@@ -31,10 +30,9 @@ namespace Network.Connection
 
             RulesHandler.AddNewRule((ushort)ConnectionRules.PacketType.HandShake, InputRules!.HandShake); 
         }
-
         private void Update()
         {
-            //((ConnectionRules.OutputRules)Connection.Instance.networkClientManager.Client.OutputRules).SynchronizePosition(gameObject.transform.position);
+            OutputRules.SynchronizePosition(gameObject.transform.position);
         }
     }
 }

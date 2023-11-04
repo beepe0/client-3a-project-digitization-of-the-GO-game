@@ -45,7 +45,7 @@ namespace Network.Connection
                 packet.Write(position.y);
                 packet.Write(position.z);
                 
-                Connection.Instance.DataHandler.SendDataTcp(packet);
+                Connection.Instance.DataHandler.SendDataUdp(packet);
             }
         }
     }
