@@ -1,3 +1,4 @@
+using Network.Connection;
 using UnityEngine;
 
 namespace Go
@@ -7,20 +8,23 @@ namespace Go
     [RequireComponent(typeof(GoBoard))]
     public class GoGame : MonoBehaviour
     {
-        [SerializeField] public GoSettings goSettings;
-        [SerializeField] public GoRules goRules;
-        [SerializeField] public GoBoard goBoard;
+        [SerializeField] private Connection conn;
+
+        [SerializeField] private GoSettings goSettings;
+        [SerializeField] private GoRules goRules;
+        [SerializeField] private GoBoard goBoard;
+        
+        public Connection Conn => conn;
+        public GoSettings Settings => goSettings;
+        public GoRules Rules => goRules;
+        public GoBoard Board => goBoard;
 
         private void Awake()
         {
+            conn = GameObject.FindWithTag("Network").GetComponent<Connection>();
             goSettings = gameObject.GetComponent<GoSettings>();
             goRules = gameObject.GetComponent<GoRules>();
             goBoard = gameObject.GetComponent<GoBoard>();
-        }
-
-        private void Start()
-        {
-            goRules.GameInitialization(this);
         }
         
         public void ShowCursor(Vector2 xy)
@@ -38,9 +42,5 @@ namespace Go
                 goBoard.pawnCursor.SetActive(false);
             }
         }
-
-        public GoSettings Settings { get => goSettings; }
-        public GoRules Rules { get => goRules; }
-        public GoBoard Board { get => goBoard; }
     }
 }

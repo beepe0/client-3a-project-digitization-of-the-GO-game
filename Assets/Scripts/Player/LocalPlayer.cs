@@ -21,8 +21,8 @@ namespace Player
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    Debug.DrawLine(r.origin, hitInfo.point, (mainGame.goBoard.numberOfSteps % 2 == 0) ? Color.red : Color.green, 10);
-                    mainGame.Rules.PawnInitialization((mainGame.goBoard.numberOfSteps % 2 == 0) ? NodeType.PawnA : NodeType.PawnB, new Vector2(hitInfo.point.x, hitInfo.point.z));
+                    Debug.DrawLine(r.origin, hitInfo.point, (mainGame.Board.numberOfSteps % 2 == 0) ? Color.red : Color.green, 10);
+                    mainGame.Rules.PawnInitialization(new Vector2(hitInfo.point.x, hitInfo.point.z));
                 }
                 else if (Input.GetKeyDown(KeyCode.Space))
                 {

@@ -42,33 +42,32 @@ namespace Go
 		
 		public void CloseMe()
         {
-            this.index = 0;
 			this.isClosed = false;
-            this.isBlocked = this.lider.listOfConnectedNeighbours.Count == 1 && this.GetNumberOfEnemyNeighbours() == 4;
-            this.blockTime = this.isBlocked ? MainGame.goBoard.numberOfSteps + 2 : 0;
+            //this.isBlocked = this.lider.listOfConnectedNeighbours.Count == 1 && this.GetNumberOfEnemyNeighbours() == 4;
+            //this.blockTime = this.isBlocked ? MainGame.Board.numberOfSteps + 2 : 0;
             this.pawnType = NodeType.None;
-            this.pawnMeshRenderer.material = MainGame.goSettings.materialPawnNone;
+            this.pawnMeshRenderer.material = MainGame.Settings.materialPawnNone;
             // this.listOfConnectedNeighbours = null;
             this.lider = null;
             this.pawnObject.SetActive(false);
             
-            this.MainGame.goBoard.openPawns.Remove(this);
+            this.MainGame.Board.openPawns.Remove(this);
 		}
 
 		public GoPawn OpenMe(NodeType nodeType)
 		{
-            Debug.Log($"BT: {this.blockTime}, NoS: {MainGame.goBoard.numberOfSteps}");
-            if (this.isClosed || (this.isBlocked && (this.blockTime - MainGame.goBoard.numberOfSteps) > 0)) return null;
+            Debug.Log($"BT: {this.blockTime}, NoS: {MainGame.Board.numberOfSteps}");
+            if (this.isClosed || (this.isBlocked && (this.blockTime - MainGame.Board.numberOfSteps) > 0)) return null;
     
-            this.index = (ushort)MainGame.goBoard.openPawns.Count;
+            this.index = (ushort)MainGame.Board.openPawns.Count;
             this.isClosed = true;
             this.isBlocked = false;
             this.pawnType = nodeType;
-            this.pawnMeshRenderer.material = nodeType == NodeType.PawnA ? MainGame.goSettings.materialPawnA : MainGame.goSettings.materialPawnB;
-            this.pawnObject.transform.localScale = new Vector3(MainGame.goSettings.pawnsSize, 0.5f, MainGame.goSettings.pawnsSize);
+            this.pawnMeshRenderer.material = nodeType == NodeType.PawnA ? MainGame.Settings.materialPawnA : MainGame.Settings.materialPawnB;
+            this.pawnObject.transform.localScale = new Vector3(MainGame.Settings.pawnsSize, 0.5f, MainGame.Settings.pawnsSize);
             this.pawnObject.SetActive(true);
             
-            this.MainGame.goBoard.openPawns.Add(this);
+            this.MainGame.Board.openPawns.Add(this);
             
             return this;
         }
