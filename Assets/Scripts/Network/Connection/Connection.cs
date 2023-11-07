@@ -1,38 +1,39 @@
 ﻿using Network.UnityClient;
-using Network.UnityClient.Handlers;
-using Singleton;
+using Network.UnityTools;
 using UnityEngine;
 
 namespace Network.Connection
 {
-    public class Connection : Singleton<Connection>
+    public class Connection : UNetworkClient
     {
-        [SerializeField] public UNetworkClientManager networkClientManager;
-
-        public UNetworkClientRulesHandler RulesHandler;
-        public UNetworkClientDataHandler DataHandler;
-        
-        public ConnectionRules.GeneralRules GeneralRules;
-        public ConnectionRules.InputRules InputRules;
-        public ConnectionRules.OutputRules OutputRules;
         private void Awake()
         {
-            RulesHandler = networkClientManager.Client.RulesHandler;
-            DataHandler = networkClientManager.Client.DataHandler;
-            
-            RulesHandler.UpdateGeneralRules(new ConnectionRules.GeneralRules());
-            RulesHandler.UpdateInputRules(new ConnectionRules.InputRules());
-            RulesHandler.UpdateOutputRules(new ConnectionRules.OutputRules());
-            
-            GeneralRules = networkClientManager.Client.GeneralRules as ConnectionRules.GeneralRules;
-            InputRules = networkClientManager.Client.InputRules as ConnectionRules.InputRules;
-            OutputRules = networkClientManager.Client.OutputRules as ConnectionRules.OutputRules;
-
-            RulesHandler.AddNewRule((ushort)ConnectionRules.PacketType.HandShake, InputRules!.HandShake); 
+            if (dontDestroyOnLoad) DontDestroyOnLoad(this);
+            if (startOnAwake) StartClient();
+            if (connectOnAwake) ConnectClient();
         }
-        private void Update()
+        private void FixedUpdate() => UNetworkUpdate.Update();
+        private void OnApplicationQuit() => CloseClient();
+
+        public override void OnCloseClient()
         {
-            OutputRules.SynchronizePosition(gameObject.transform.position);
+            Debug.Log("OnCloseClient!");
+        }
+
+        public override void OnStartClient()
+        {
+            Debug.Log("OnStartClient!");
+            RulesHandler.AddRule(0, Test);
+        }
+        
+        public override void OnConnectClient()
+        {
+            Debug.Log("OnConnectClientAsync!");
+        }
+
+        public void Test(UNetworkReadablePacket packet)
+        {
+            Debug.Log($"{packet.ReadString()}");
         }
     }
 }

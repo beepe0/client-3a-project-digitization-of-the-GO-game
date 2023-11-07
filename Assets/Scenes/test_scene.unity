@@ -519,7 +519,7 @@ MonoBehaviour:
   pawnsSize: 0
   boardMaterial: {fileID: 2100000, guid: b2f689e0e9152c044bc76a7d1d4bd658, type: 2}
   prefabBoard: {fileID: 1494517930}
-  boardSize: {x: 7, y: 7}
+  boardSize: {x: 13, y: 13}
   cellsSize: 10
   cellsCoefSize: 1.15
 --- !u!114 &444991626
@@ -667,7 +667,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 583533375}
-  - component: {fileID: 583533374}
   - component: {fileID: 583533373}
   - component: {fileID: 583533376}
   m_Layer: 0
@@ -689,24 +688,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10dd9038116f4122974037cc5368401d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dontDestroyOnLoad: 1
-  networkClientManager: {fileID: 583533374}
---- !u!114 &583533374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583533372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff1853cce2ba72648af73c7aa68a9ace, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
   startOnAwake: 1
   connectOnAwake: 0
-  serverPort: 12345
+  serverPort: 34567
   serverInternetProtocol: 127.0.0.1
   receiveBufferSize: 512
   sendBufferSize: 512
@@ -737,6 +722,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 658acd32b3bb4316acf89556fdbcb785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dontDestroyOnLoad: 1
+  connection: {fileID: 583533373}
+  isActiveInitializedGUIStyle: 1
+  isActiveConnectionPanel: 1
 --- !u!1 &606527912
 GameObject:
   m_ObjectHideFlags: 0
