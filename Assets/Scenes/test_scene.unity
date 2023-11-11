@@ -367,6 +367,7 @@ MonoBehaviour:
     type: 3}
   prefabGlobalPlayer: {fileID: 2543701533719211612, guid: 7d3831896ec2e8d44801f73e236d756c,
     type: 3}
+  connectionGUI: {fileID: 583533376}
 --- !u!4 &583533375
 Transform:
   m_ObjectHideFlags: 0
@@ -397,9 +398,8 @@ MonoBehaviour:
   _dontDestroyOnLoad: 1
   connection: {fileID: 583533373}
   isActiveInitializedGUIStyle: 1
-  isActiveConnectionPanel: 1
-  isActiveClientInfoPanel: 1
-  isActiveSettingsPanel: 1
+  isActiveClientInfoPanel: 0
+  isActiveConsole: 0
 --- !u!1 &606527912
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +432,7 @@ MonoBehaviour:
   _dontDestroyOnLoad: 1
   frameRate: 60
   vSync: 0
+  isRunInBackground: 1
   cursorLockMode: 0
   isVisibleCursor: 1
 --- !u!4 &606527914

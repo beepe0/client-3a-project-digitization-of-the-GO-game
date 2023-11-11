@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class ApplicationSettings : Singleton<ApplicationSettings>
 {
-    [SerializeField, Header("Target frame rate")]
+    [SerializeField, Header("Monitor")]
     public int frameRate;
-
-    [SerializeField, Header("vSync")]
     public int vSync;
 
+    [SerializeField, Header("Client")] 
+    public bool isRunInBackground;
+    
     [SerializeField, Header("Cursor lock mode")]
     public CursorLockMode cursorLockMode;
+    
     [SerializeField]
     public bool isVisibleCursor;
     
@@ -23,7 +25,7 @@ public class ApplicationSettings : Singleton<ApplicationSettings>
     public void UpdateField()
     {
         Application.targetFrameRate = frameRate;
-        Application.runInBackground = true;
+        Application.runInBackground = isRunInBackground;
         QualitySettings.vSyncCount = vSync;
 
         Cursor.lockState = cursorLockMode;

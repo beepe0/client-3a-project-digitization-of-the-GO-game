@@ -9,33 +9,37 @@ namespace Player
         public Camera localPlayerCamera;
         public GoGame mainGame;
 
-        private void Update() => MouseRaycast();
-        private void MouseRaycast()
+        private Ray _rayFromCursor;
+        private RaycastHit _result;
+        private bool _didRayHitSomething;
+
+        private void Update()
         {
-            Vector3 mousePosition = Input.mousePosition;
-            Ray r = localPlayerCamera.ScreenPointToRay(mousePosition);
-        
-            RaycastHit hitInfo;
+            _didRayHitSomething = MouseRaycast(out _rayFromCursor, out _result);
+            InputFrom();
+        }
+
+        private void InputFrom()
+        {
+            if ((mainGame == null && _didRayHitSomething) && !_result.collider.gameObject.TryGetComponent(out mainGame))
+                return;
+            if (mainGame == null) return;
             
-            if (Physics.Raycast(r, out hitInfo, 100))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0))
-                {
-                    Debug.DrawLine(r.origin, hitInfo.point, (mainGame.Board.numberOfSteps % 2 == 0) ? Color.red : Color.green, 10);
-                    mainGame.Rules.PawnInitialization(new Vector2(hitInfo.point.x, hitInfo.point.z));
-                }
-                else if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    Debug.Log("PASS");
-                    mainGame.Rules.PawnPass();
-                }
-                else
-                {
-                    Debug.DrawLine(r.origin, hitInfo.point, Color.blue, 0);
-                    mainGame.ShowCursor(new Vector2(hitInfo.point.x, hitInfo.point.z));
-                }
-                
+                mainGame.PawnPass();
+            }
+            else if (Input.GetKeyDown(KeyCode.Mouse0) && _didRayHitSomething)
+            {
+                Debug.DrawLine(_rayFromCursor.origin, _result.point, (mainGame.Board.numberOfSteps % 2 == 0) ? Color.red : Color.green, 10);
+                mainGame.PawnInitialization(new Vector2(_result.point.x, _result.point.z));
+            }
+            else if(_didRayHitSomething)
+            {
+                Debug.DrawLine(_rayFromCursor.origin, _result.point, Color.blue, 0);
+                mainGame.ShowCursor(new Vector2(_result.point.x, _result.point.z));
             }
         }
+        private bool MouseRaycast(out Ray r, out RaycastHit hitInfo) => Physics.Raycast(r = localPlayerCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, 100);
     }
 }
