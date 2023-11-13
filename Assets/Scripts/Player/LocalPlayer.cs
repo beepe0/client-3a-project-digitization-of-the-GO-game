@@ -25,14 +25,14 @@ namespace Player
                 return;
             if (mainGame == null) return;
             
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Space))
             {
                 mainGame.PawnPass();
             }
             else if (Input.GetKeyDown(KeyCode.Mouse0) && _didRayHitSomething)
             {
                 Debug.DrawLine(_rayFromCursor.origin, _result.point, (mainGame.Board.numberOfSteps % 2 == 0) ? Color.red : Color.green, 10);
-                mainGame.PawnInitialization(new Vector2(_result.point.x, _result.point.z));
+                mainGame.InitializingPawn(new Vector2(_result.point.x, _result.point.z));
             }
             else if(_didRayHitSomething)
             {

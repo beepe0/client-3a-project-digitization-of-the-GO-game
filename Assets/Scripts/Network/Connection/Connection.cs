@@ -4,15 +4,16 @@ using Network.UnityClient;
 using Network.UnityTools;
 using Player;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Network.Connection
 {
     public class Connection : UNetworkClient
-    {
-        [SerializeField] private GameObject prefabBoard;
-        [SerializeField] private GameObject prefabLocalPlayer;
-        [SerializeField] private GameObject prefabGlobalPlayer;
-        [SerializeField] private ConnectionGUI connectionGUI;
+    { 
+        [SerializeField] private GameObject _prefabBoard;
+        [SerializeField] private GameObject _prefabLocalPlayer;
+        [SerializeField] private GameObject _prefabGlobalPlayer;
+        [SerializeField] private ConnectionGUI _connectionGUI;
         private void Awake()
         {
             if (dontDestroyOnLoad) DontDestroyOnLoad(this);
@@ -31,7 +32,8 @@ namespace Network.Connection
             RulesHandler.AddRule((ushort)PacketType.HandShake, HandShake);
             RulesHandler.AddRule((ushort)PacketType.DisconnectingPlayer, DisconnectingPlayer);
             RulesHandler.AddRule((ushort)PacketType.ConnectingPlayer, ConnectingPlayer);
-            RulesHandler.AddRule((ushort)PacketType.StartGame, StartGame);
+            RulesHandler.AddRule((ushort)PacketType.JoinGame, JoinGame);
+            RulesHandler.AddRule((ushort)PacketType.CreateGame, CreateGame);
             RulesHandler.AddRule((ushort)PacketType.UpdatePlayer, UpdatePlayer);
             RulesHandler.AddRule((ushort)PacketType.PawnOpen, PawnOpen);
             RulesHandler.AddRule((ushort)PacketType.PawnClose, PawnClose);
@@ -53,37 +55,34 @@ namespace Network.Connection
         }
         private void DisconnectingPlayer(UNetworkReadablePacket readablePacket)
         {
-            connectionGUI.ConsoleValue.Insert(0, $"ID: {readablePacket.Index} was disconnected!");
+            _connectionGUI.ConsoleValue.Insert(0, $"ID: {readablePacket.Index} was disconnected!");
         }
         private void ConnectingPlayer(UNetworkReadablePacket readablePacket)
         {
-            connectionGUI.ConsoleValue.Insert(0, $"ID: {readablePacket.Index} was connected!");
+            _connectionGUI.ConsoleValue.Insert(0, $"ID: {readablePacket.Index} was connected!");
         }
-        private void StartGame()
+        private void JoinGame()
         {
-            UNetworkIOPacket packet = new UNetworkIOPacket((ushort)PacketType.StartGame);
+            UNetworkIOPacket packet = new UNetworkIOPacket((ushort)PacketType.JoinGame);
             
             DataHandler.SendDataTcp(packet);
         }
-        private void StartGame(UNetworkReadablePacket readablePacket)
+        private void JoinGame(UNetworkReadablePacket readablePacket)
         {
             float pawnsSize = readablePacket.ReadFloat();
             Vector2Int boardSize = new Vector2Int(readablePacket.ReadInt(), readablePacket.ReadInt());
             float cellsSize = readablePacket.ReadFloat();
             float cellsCoefSize = readablePacket.ReadFloat();
             
-            Debug.Log($"Pawns Size: {pawnsSize}, Board Size: {boardSize}, Cells Size: {cellsSize}, Cells Coef Size: {cellsCoefSize}");
-
-            GoGame goGame = Instantiate(prefabBoard, GameObject.FindWithTag("Table").transform).GetComponent<GoGame>();
+            GoGame goGame = Instantiate(_prefabBoard, GameObject.FindWithTag("Table").transform).GetComponent<GoGame>();
             
             goGame.Settings.pawnsSize = pawnsSize;
             goGame.Settings.boardSize = boardSize;
             goGame.Settings.cellsSize = cellsSize;
             goGame.Settings.cellsCoefSize = cellsCoefSize;
             
-            goGame.GameInitialization();
+            goGame.InitializingGame();
             
-            Debug.Log($"L: {readablePacket.Length}, RP: {readablePacket.ReadPointer}");
             if (readablePacket.BufferBytes.Count > readablePacket.ReadPointer)
             {
                 int numberOfOpenPawns = readablePacket.ReadInt();
@@ -93,16 +92,34 @@ namespace Network.Connection
                 }
             }
         }
+        private void CreateGame(UNetworkReadablePacket readablePacket)
+        {
+            float pawnsSize = readablePacket.ReadFloat();
+            Vector2Int boardSize = new Vector2Int(readablePacket.ReadInt(), readablePacket.ReadInt());
+            float cellsSize = readablePacket.ReadFloat();
+            float cellsCoefSize = readablePacket.ReadFloat();
+
+            if (LocalPlayer.Instance.mainGame != null) Destroy(LocalPlayer.Instance.mainGame.gameObject);
+            
+            GoGame goGame = Instantiate(_prefabBoard, GameObject.FindWithTag("Table").transform).GetComponent<GoGame>();
+            
+            goGame.Settings.pawnsSize = pawnsSize;
+            goGame.Settings.boardSize = boardSize;
+            goGame.Settings.cellsSize = cellsSize;
+            goGame.Settings.cellsCoefSize = cellsCoefSize;
+            
+            goGame.InitializingGame();
+        }
         private void UpdatePlayer(UNetworkReadablePacket readablePacket)
         {
             ushort clientId = readablePacket.ReadUShort();
             if (Index == clientId)
             {
-                Instantiate(prefabLocalPlayer);
+                Instantiate(_prefabLocalPlayer);
             }
             else if (Index != clientId)
             {
-                Instantiate(prefabGlobalPlayer);
+                Instantiate(_prefabGlobalPlayer);
             }
         }
         private void PawnOpen(UNetworkReadablePacket readablePacket)
@@ -121,10 +138,12 @@ namespace Network.Connection
             HandShake,
             DisconnectingPlayer,
             ConnectingPlayer,
-            StartGame,
+            JoinGame,
+            CreateGame,
             UpdatePlayer,
             PawnOpen,
             PawnClose,
+            PawnPass,
             ConsoleCommand,
         }
     }

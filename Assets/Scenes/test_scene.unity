@@ -361,13 +361,13 @@ MonoBehaviour:
   serverInternetProtocol: 127.0.0.1
   receiveBufferSize: 512
   sendBufferSize: 512
-  prefabBoard: {fileID: 1232944288202806569, guid: a6b224825a69d8a4392cbc58be442fee,
+  _prefabBoard: {fileID: 1232944288202806569, guid: a6b224825a69d8a4392cbc58be442fee,
     type: 3}
-  prefabLocalPlayer: {fileID: 2102331980022547619, guid: e4ba3500f3c3bbb468d48b43f4fdb67b,
+  _prefabLocalPlayer: {fileID: 2102331980022547619, guid: e4ba3500f3c3bbb468d48b43f4fdb67b,
     type: 3}
-  prefabGlobalPlayer: {fileID: 2543701533719211612, guid: 7d3831896ec2e8d44801f73e236d756c,
+  _prefabGlobalPlayer: {fileID: 2543701533719211612, guid: 7d3831896ec2e8d44801f73e236d756c,
     type: 3}
-  connectionGUI: {fileID: 583533376}
+  _connectionGUI: {fileID: 583533376}
 --- !u!4 &583533375
 Transform:
   m_ObjectHideFlags: 0

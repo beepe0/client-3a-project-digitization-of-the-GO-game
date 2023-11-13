@@ -23,8 +23,7 @@ namespace Go
             goSettings = gameObject.GetComponent<GoSettings>();
             goBoard = gameObject.GetComponent<GoBoard>();
         }
-
-        public void GameInitialization()
+        public void InitializingGame()
         {
             gameObject.transform.localScale = new Vector3((Settings.boardSize.x - 1) / Settings.cellsSize, 1, (Settings.boardSize.y - 1) / Settings.cellsSize);
             Settings.boardMaterial.mainTextureScale = new Vector2((Settings.boardSize.x - 1), (Settings.boardSize.y - 1));
@@ -53,16 +52,19 @@ namespace Go
                 }
             }
         }
-        
-        public void PawnInitialization(Vector2 xy)
+        public void InitializingPawn(Vector2 xy)
         {
             UNetworkIOPacket packet = new UNetworkIOPacket((ushort)Connection.PacketType.PawnOpen);
             packet.Write(xy.x);
             packet.Write(xy.y);
             Conn.DataHandler.SendDataTcp(packet);
         }
+        public void PawnPass()
+        {
+            UNetworkIOPacket packet = new UNetworkIOPacket((ushort)Connection.PacketType.PawnPass);
 
-        public void PawnPass() => Debug.Log("PASS");
+            Conn.DataHandler.SendDataTcp(packet);
+        }
         public void ShowCursor(Vector2 xy)
         {
             short convertMatrixToLine = GoTools.ConvertRayToLine(xy, goBoard.offset, goSettings.boardSize, goSettings.cellsSize);

@@ -60,8 +60,8 @@ namespace DebugGUI
                 _fps = (ushort)(1 / Time.deltaTime);
                 _timer = 0;
             }
-            GUI.Box(new Rect(0, 0, 220, 48), Texture2D.blackTexture);
-            GUI.Label(new Rect(10, 0, 220, 48), $"FPS: {_fps.ToString()}", _labels);
+            GUI.Label(new Rect(10, 0, 600, 27), $"ID: {connection.Index}, FPS: {_fps.ToString()}", _labels);
+            GUI.Label(new Rect(10, 20, 600, 27), $"SERVER ADDRESS: {connection.serverInternetProtocol}:{connection.serverPort}", _labels);
         }
         private void ConsolePanel(bool isActive)
         {
@@ -137,7 +137,7 @@ namespace DebugGUI
                     break;
             }
 
-            if (!isGlobal && showAnswer) ConsoleCommand(answer, clearField);
+            ConsoleCommand(answer, clearField, (!isGlobal && showAnswer));
         }
         private void ConsoleCommand(string value)
         {
@@ -150,13 +150,16 @@ namespace DebugGUI
 
         private void ConsoleCommand(UNetworkReadablePacket readablePacket)
         {
-            _consoleFieldValue = "";
-            ConsoleValue.Insert(0,$"ID: {readablePacket.Index} {readablePacket.ReadString()}");
+            string answer = readablePacket.ReadString();
+            bool clearField = readablePacket.ReadBool();
+            bool showAnswer = readablePacket.ReadBool();
+            if (clearField) _consoleFieldValue = "";
+            if (showAnswer) ConsoleValue.Insert(0,$"ID: {readablePacket.Index} {answer}");
         }
-        private void ConsoleCommand(string value, bool clearField)
+        private void ConsoleCommand(string value, bool clearField, bool showAnswer)
         {
             if (clearField) _consoleFieldValue = "";
-            ConsoleValue.Insert(0,$"ID: {connection.Index} {value}");
+            if (showAnswer) ConsoleValue.Insert(0,$"ID: {connection.Index} {value}");
         }
     }
 }
