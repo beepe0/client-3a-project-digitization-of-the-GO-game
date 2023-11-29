@@ -130,6 +130,7 @@ namespace Network.Connection
         }
         private void PawnClose(UNetworkReadablePacket readablePacket)
         {
+            Debug.Log($"PawnClose: {readablePacket.Index}");
             short index = readablePacket.ReadShort();
             LocalPlayer.Instance.mainGame.Board.pawns[index].CloseMe();
         }
