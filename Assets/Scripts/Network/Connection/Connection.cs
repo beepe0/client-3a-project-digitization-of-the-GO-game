@@ -22,11 +22,11 @@ namespace Network.Connection
         }
         private void FixedUpdate() => UNetworkUpdate.Update();
         private void OnApplicationQuit() => CloseClient();
-        public override void OnCloseClient()
+        public new void OnCloseClient()
         {
             Debug.Log("OnCloseClient!");
         }
-        public override void OnStartClient()
+        public new void OnStartClient()
         {
             Debug.Log("OnStartClient!");
             RulesHandler.AddRule((ushort)PacketType.HandShake, HandShake);
@@ -38,7 +38,7 @@ namespace Network.Connection
             RulesHandler.AddRule((ushort)PacketType.PawnOpen, PawnOpen);
             RulesHandler.AddRule((ushort)PacketType.PawnClose, PawnClose);
         }
-        public override void OnConnectClient()
+        public new void OnConnectClient()
         {
             Debug.Log("OnConnectClient!");
         }
