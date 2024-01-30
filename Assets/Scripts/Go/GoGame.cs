@@ -1,4 +1,5 @@
 using Network.Connection;
+using Network.Connection.Player;
 using Network.UnityTools;
 using UnityEngine;
 
@@ -80,5 +81,6 @@ namespace Go
                 goBoard.pawnCursor.SetActive(false);
             }
         }
+        
     }
 }

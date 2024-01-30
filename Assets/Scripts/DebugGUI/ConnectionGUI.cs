@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Network.Connection;
+using Network.Connection.Player;
 using Network.UnityTools;
 using Singleton;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace DebugGUI
 {

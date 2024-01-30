@@ -1,18 +1,17 @@
 ﻿using DebugGUI;
 using Go;
+using Network.Connection.Player;
+using Network.Connection.Room;
 using Network.UnityClient;
 using Network.UnityTools;
-using Player;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Network.Connection
 {
-    public class Connection : UNetworkClient
+    public class Connection : UNetworkConnection
     { 
         [SerializeField] private GameObject _prefabBoard;
         [SerializeField] private GameObject _prefabLocalPlayer;
-        [SerializeField] private GameObject _prefabGlobalPlayer;
         [SerializeField] private ConnectionGUI _connectionGUI;
         private void Awake()
         {
@@ -22,23 +21,22 @@ namespace Network.Connection
         }
         private void FixedUpdate() => UNetworkUpdate.Update();
         private void OnApplicationQuit() => CloseClient();
-        public new void OnCloseClient()
+        protected override void OnCloseClient()
         {
             Debug.Log("OnCloseClient!");
         }
-        public new void OnStartClient()
+        protected override void OnStartClient()
         {
             Debug.Log("OnStartClient!");
             RulesHandler.AddRule((ushort)PacketType.HandShake, HandShake);
             RulesHandler.AddRule((ushort)PacketType.DisconnectingPlayer, DisconnectingPlayer);
             RulesHandler.AddRule((ushort)PacketType.ConnectingPlayer, ConnectingPlayer);
-            RulesHandler.AddRule((ushort)PacketType.JoinGame, JoinGame);
-            RulesHandler.AddRule((ushort)PacketType.CreateGame, CreateGame);
+            RulesHandler.AddRule((ushort)PacketType.StartGame, StartGame);
             RulesHandler.AddRule((ushort)PacketType.UpdatePlayer, UpdatePlayer);
             RulesHandler.AddRule((ushort)PacketType.PawnOpen, PawnOpen);
             RulesHandler.AddRule((ushort)PacketType.PawnClose, PawnClose);
         }
-        public new void OnConnectClient()
+        protected override void OnConnectClient()
         {
             Debug.Log("OnConnectClient!");
         }
@@ -61,27 +59,27 @@ namespace Network.Connection
         {
             _connectionGUI.ConsoleValue.Insert(0, $"ID: {readablePacket.Index} was connected!");
         }
-        private void JoinGame()
-        {
-            UNetworkIOPacket packet = new UNetworkIOPacket((ushort)PacketType.JoinGame);
-            
-            DataHandler.SendDataTcp(packet);
-        }
-        private void JoinGame(UNetworkReadablePacket readablePacket)
+        private void StartGame(UNetworkReadablePacket readablePacket)
         {
             float pawnsSize = readablePacket.ReadFloat();
             Vector2Int boardSize = new Vector2Int(readablePacket.ReadInt(), readablePacket.ReadInt());
             float cellsSize = readablePacket.ReadFloat();
             float cellsCoefSize = readablePacket.ReadFloat();
-            
-            GoGame goGame = Instantiate(_prefabBoard, GameObject.FindWithTag("Table").transform).GetComponent<GoGame>();
-            
+            ushort roomId = readablePacket.ReadUShort();
+            LocalRoom lr;
+            GoGame goGame;
+
+            lr = UNetworkRoom.CreateInstance<LocalRoom>(this, roomId, GameObject.FindWithTag("Network.Room").transform);
+            goGame = Instantiate(_prefabBoard, GameObject.FindWithTag("Table").transform).GetComponent<GoGame>();
             goGame.Settings.pawnsSize = pawnsSize;
             goGame.Settings.boardSize = boardSize;
             goGame.Settings.cellsSize = cellsSize;
             goGame.Settings.cellsCoefSize = cellsCoefSize;
-            
             goGame.InitializingGame();
+            
+            lr.mainGame = goGame;
+            lr.Open();
+            CurrentSession = lr;
             
             if (readablePacket.BufferBytes.Count > readablePacket.ReadPointer)
             {
@@ -92,55 +90,39 @@ namespace Network.Connection
                 }
             }
         }
-        private void CreateGame(UNetworkReadablePacket readablePacket)
-        {
-            float pawnsSize = readablePacket.ReadFloat();
-            Vector2Int boardSize = new Vector2Int(readablePacket.ReadInt(), readablePacket.ReadInt());
-            float cellsSize = readablePacket.ReadFloat();
-            float cellsCoefSize = readablePacket.ReadFloat();
-
-            if (LocalPlayer.Instance.mainGame != null) Destroy(LocalPlayer.Instance.mainGame.gameObject);
-            
-            GoGame goGame = Instantiate(_prefabBoard, GameObject.FindWithTag("Table").transform).GetComponent<GoGame>();
-            
-            goGame.Settings.pawnsSize = pawnsSize;
-            goGame.Settings.boardSize = boardSize;
-            goGame.Settings.cellsSize = cellsSize;
-            goGame.Settings.cellsCoefSize = cellsCoefSize;
-            
-            goGame.InitializingGame();
-        }
         private void UpdatePlayer(UNetworkReadablePacket readablePacket)
         {
             ushort clientId = readablePacket.ReadUShort();
+            
             if (Index == clientId)
             {
-                Instantiate(_prefabLocalPlayer);
+                LocalPlayer lp = UNetworkClient.CreateInstance<LocalPlayer>(this, clientId, GameObject.FindWithTag("Network.Players").transform, _prefabLocalPlayer);
+                //CurrentSession.Enter(lp);
             }
             else if (Index != clientId)
             {
-                Instantiate(_prefabGlobalPlayer);
+                LocalPlayer lp = UNetworkClient.CreateInstance<LocalPlayer>(this, clientId, GameObject.FindWithTag("Network.Players").transform);
+                //CurrentSession.Enter(lp);
             }
         }
         private void PawnOpen(UNetworkReadablePacket readablePacket)
         {
             short index = readablePacket.ReadShort();
             byte type = readablePacket.ReadByte();
-            LocalPlayer.Instance.mainGame.Board.pawns[index].OpenMe((NodeType)type);
+            GetCurrentSession<LocalRoom>().mainGame.Board.pawns[index].OpenMe((NodeType)type);
         }
         private void PawnClose(UNetworkReadablePacket readablePacket)
         {
             Debug.Log($"PawnClose: {readablePacket.Index}");
             short index = readablePacket.ReadShort();
-            LocalPlayer.Instance.mainGame.Board.pawns[index].CloseMe();
+            GetCurrentSession<LocalRoom>().mainGame.Board.pawns[index].CloseMe();
         }
         public enum PacketType : byte
         {
             HandShake,
             DisconnectingPlayer,
             ConnectingPlayer,
-            JoinGame,
-            CreateGame,
+            StartGame,
             UpdatePlayer,
             PawnOpen,
             PawnClose,
